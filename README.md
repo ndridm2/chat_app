@@ -17,5 +17,4 @@ samples, guidance on mobile development, and a full API reference.
 
 #
 #demo
-https://github.com/ndridm2/chat_app/assets/64353589/edd90638-1349-4398-92eb-f8567467b459
 
