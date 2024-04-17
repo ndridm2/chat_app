@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trial_chat/pages/call_page.dart';
 import 'package:trial_chat/pages/home_page.dart';
-import 'package:trial_chat/pages/profile_page.dart';
+// import 'package:trial_chat/pages/profile_page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -14,8 +13,7 @@ class _MenuPageState extends State<MenuPage> {
   int _currentIndex = 0;
   final List _pages = [
     const HomePage(),
-    const CallPage(),
-    const ProfilePage(),
+    // const ProfilePage(),
   ];
 
   @override

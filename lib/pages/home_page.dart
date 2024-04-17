@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final currentUser = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +24,11 @@ class _HomePageState extends State<HomePage> {
         automaticallyImplyLeading: false,
         title: const Text(
           'Chats',
-          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Oxygen',
+          ),
         ),
         backgroundColor: Colors.white,
         actions: [
@@ -37,47 +42,44 @@ class _HomePageState extends State<HomePage> {
             onSelected: (string) {},
             itemBuilder: (context) => <PopupMenuEntry<String>>[
               PopupMenuItem<String>(
-                value: 'Logout',
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) {
-                        FirebaseAuth.instance.signOut();
-                        return const LoginPage();
-                      },
-                    ));
-                  },
-                  icon: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.logout, color: Colors.blueGrey),
-                      SizedBox(width: 5),
-                      Text('Logout', style: TextStyle(color: Colors.black87)),
-                    ],
-                  ),
+                value: 'profile',
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return const ProfilePage();
+                  }));
+                },
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.person, color: Colors.blueGrey),
+                    SizedBox(width: 5),
+                    Text('Profile', style: TextStyle(color: Colors.black87)),
+                  ],
                 ),
               ),
+            ],
+          ),
+          PopupMenuButton<String>(
+            onSelected: (string) {},
+            itemBuilder: (context) => <PopupMenuEntry<String>>[
               PopupMenuItem<String>(
-                value: 'Profile',
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const ProfilePage(),
-                        ),
-                      );
+                value: 'Logout',
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) {
+                      FirebaseAuth.instance.signOut();
+                      return const LoginPage();
                     },
-                    icon: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.person, color: Colors.blueGrey),
-                        SizedBox(width: 5),
-                        Text(
-                          'Profile',
-                          style: TextStyle(color: Colors.black87),
-                        ),
-                      ],
-                    )),
+                  ));
+                },
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.logout, color: Colors.blueGrey),
+                    SizedBox(width: 5),
+                    Text('Logout', style: TextStyle(color: Colors.black87)),
+                  ],
+                ),
               ),
             ],
           ),
@@ -107,14 +109,33 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: Colors.blueGrey,
                   radius: 25,
                   child: Text(users[index].userName[0].toUpperCase(),
-                      style: const TextStyle(color: Colors.white)),
+                      style: const TextStyle(
+                          color: Colors.white, fontFamily: 'Oxygen')),
                 ),
-                title: Text(users[index].userName),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      users[index].userName,
+                      style: const TextStyle(fontFamily: 'Platypi'),
+                    ),
+                    Text(
+                      '${DateTime.now().hour}.${DateTime.now().minute}',
+                      style: const TextStyle(
+                        color: Colors.black54,
+                        fontFamily: 'Oxygen',
+                        fontSize: 10,
+                      ),
+                    ),
+                  ],
+                ),
                 subtitle: const Row(
                   children: [
-                    Icon(Icons.timelapse_sharp, size: 17),
                     SizedBox(width: 3),
-                    Text('Last message'),
+                    Text(
+                      '',
+                      style: TextStyle(fontFamily: 'Oxygen'),
+                    ),
                   ],
                 ),
                 onTap: () {
