@@ -6,7 +6,6 @@ import 'package:trial_chat/data/datasources/firebase_datasource.dart';
 import 'package:trial_chat/data/models/message_model.dart';
 
 import 'package:trial_chat/data/models/user_model.dart';
-
 import '../data/models/channel_model.dart';
 import 'widgets/chat_bubble.dart';
 
@@ -24,33 +23,70 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final currentUser = FirebaseAuth.instance.currentUser;
   final TextEditingController _messageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: CupertinoButton(
           child: const Icon(
-            Icons.arrow_back,
-            color: Colors.black87,
+            Icons.arrow_back_ios,
+            color: Colors.white,
           ),
           onPressed: () => Navigator.pop(context),
         ),
+        titleSpacing: -10,
         title: Row(
           children: [
-            const CircleAvatar(
-              backgroundColor: Colors.grey,
-              radius: 16,
-              child: Icon(Icons.person, color: Colors.white),
+            CircleAvatar(
+              backgroundColor: Colors.grey[400],
+              radius: 18,
+              child: const Icon(Icons.person, color: Colors.white),
             ),
             const SizedBox(width: 15),
             Text(
               widget.partnerUser.userName,
               style: const TextStyle(
-                  color: Colors.black87, fontWeight: FontWeight.w600),
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Oxygen',
+              ),
             ),
           ],
         ),
-        backgroundColor: Colors.white38,
+        backgroundColor: Colors.grey,
+        actions: [
+          PopupMenuButton(
+            iconColor: Colors.white,
+            onSelected: (value) {},
+            itemBuilder: (context) => <PopupMenuItem<String>>[
+              PopupMenuItem<String>(
+                value: 'Profile',
+                onTap: () {},
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.person, color: Colors.blueGrey),
+                    SizedBox(width: 5),
+                    Text('Profile', style: TextStyle(color: Colors.black87)),
+                  ],
+                ),
+              ),
+              PopupMenuItem<String>(
+                value: 'Delete',
+                onTap: () {},
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.delete, color: Colors.blueGrey),
+                    SizedBox(width: 5),
+                    Text('Delete', style: TextStyle(color: Colors.black87)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -82,6 +118,7 @@ class _ChatPageState extends State<ChatPage> {
                             ? Direction.right
                             : Direction.left,
                         message: message.textMessage,
+                        sendAt: message.sendAt,
                         type: BubbleType.alone,
                       );
                     },
@@ -103,7 +140,7 @@ class _ChatPageState extends State<ChatPage> {
                       hintText: 'Type a message...',
                       suffixIcon: const Icon(
                         Icons.camera_alt_outlined,
-                        color: Colors.blue,
+                        color: Colors.blueGrey,
                       ),
                     ),
                   ),
@@ -115,7 +152,7 @@ class _ChatPageState extends State<ChatPage> {
                   icon: Container(
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.blue,
+                      color: Colors.blueGrey,
                     ),
                     padding: const EdgeInsets.all(10),
                     child: const Icon(
@@ -137,7 +174,6 @@ class _ChatPageState extends State<ChatPage> {
       return;
     }
     // channel not created yet
-
     final channel = Channel(
       id: channelid(currentUser!.uid, widget.partnerUser.id),
       memberIds: [currentUser!.uid, widget.partnerUser.id],

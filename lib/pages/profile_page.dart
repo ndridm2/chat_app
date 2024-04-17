@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'login_page.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({
+    Key? key,
+  }) : super(key: key);
+
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -17,6 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: -10,
         title: const Text(
           'Settings',
           style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
@@ -27,27 +30,6 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: const EdgeInsets.all(0.6),
         child: ListView(
           children: [
-            Container(
-              height: 50,
-              margin: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(28),
-              ),
-              child: const Column(
-                children: [
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search',
-                      border: InputBorder.none,
-                      prefixIcon: Icon(
-                        Icons.search_rounded,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
             Container(
               height: 200,
               margin: const EdgeInsets.all(10),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 enum BubbleType {
@@ -17,11 +18,13 @@ class ChatBubble extends StatelessWidget {
     Key? key,
     required this.direction,
     required this.message,
+    required this.sendAt,
     required this.type,
     this.photoUrl,
   }) : super(key: key);
   final Direction direction;
   final String message;
+  final Timestamp sendAt;
   final String? photoUrl;
   final BubbleType type;
 
@@ -38,19 +41,48 @@ class ChatBubble extends StatelessWidget {
         Container(
           constraints:
               BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           margin: const EdgeInsets.symmetric(vertical: 4),
           decoration: BoxDecoration(
-            borderRadius: _borderRadius(direction, type),
-            color: isOnLeft ? Colors.black87 : Colors.blueGrey,
-          ),
-          child: Text(
-            message,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: isOnLeft ? Colors.white : Colors.white,
-            ),
+              borderRadius: isOnLeft
+                  ? const BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      topLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    )
+                  : const BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      topLeft: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                    ),
+              color: isOnLeft ? Colors.white : Colors.grey[300],
+              boxShadow: const [
+                BoxShadow(
+                  blurRadius: 4,
+                  offset: Offset(2, 1),
+                )
+              ]),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                message,
+                maxLines: 5,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Oxygen',
+                  color: isOnLeft ? Colors.black : Colors.black,
+                ),
+              ),
+              Text(
+                '${sendAt.toDate().hour}.${sendAt.toDate().minute}',
+                style: TextStyle(
+                  fontSize: 10,
+                  color: isOnLeft ? Colors.black54 : Colors.black54,
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -58,60 +90,53 @@ class ChatBubble extends StatelessWidget {
   }
 
   Widget _buildLeading(BubbleType type) {
-    if (type == BubbleType.alone || type == BubbleType.bottom) {
-    }
-    return const SizedBox(width: 3);
+    if (type == BubbleType.alone || type == BubbleType.bottom) {}
+    return const SizedBox(width: 4);
   }
 
-  BorderRadius _borderRadius(Direction dir, BubbleType type) {
-    const radius1 = Radius.circular(15);
-    const radius2 = Radius.circular(5);
-    switch (type) {
-      case BubbleType.top:
-        return dir == Direction.left
-            ? const BorderRadius.only(
-                topLeft: radius1,
-                topRight: radius1,
-                bottomLeft: radius2,
-                bottomRight: radius1,
-              )
-            : const BorderRadius.only(
-                topLeft: radius1,
-                topRight: radius1,
-                bottomLeft: radius1,
-                bottomRight: radius2,
-              );
+  // BorderRadius _borderRadius(Direction dir, BubbleType type) {
+  //   const radius1 = Radius.circular(15);
+  //   const radius2 = Radius.circular(15);
+  //   switch (type) {
+  //     case BubbleType.top:
+  //       return dir == Direction.left
+  //           ? const BorderRadius.only(
+  //               topLeft: radius1,
+  //               topRight: radius1,
+  //               bottomLeft: radius2,
+  //             )
+  //           : const BorderRadius.only(
+  //               topLeft: radius1,
+  //               topRight: radius1,
+  //               bottomRight: radius2,
+  //             );
 
-      case BubbleType.middle:
-        return dir == Direction.left
-            ? const BorderRadius.only(
-                topLeft: radius2,
-                topRight: radius1,
-                bottomLeft: radius2,
-                bottomRight: radius1,
-              )
-            : const BorderRadius.only(
-                topLeft: radius1,
-                topRight: radius2,
-                bottomLeft: radius1,
-                bottomRight: radius2,
-              );
-      case BubbleType.bottom:
-        return dir == Direction.left
-            ? const BorderRadius.only(
-                topLeft: radius2,
-                topRight: radius1,
-                bottomLeft: radius1,
-                bottomRight: radius1,
-              )
-            : const BorderRadius.only(
-                topLeft: radius1,
-                topRight: radius2,
-                bottomLeft: radius1,
-                bottomRight: radius1,
-              );
-      case BubbleType.alone:
-        return BorderRadius.circular(15);
-    }
-  }
+  //     case BubbleType.middle:
+  //       return dir == Direction.left
+  //           ? const BorderRadius.only(
+  //               topLeft: radius2,
+  //               topRight: radius1,
+  //               bottomLeft: radius2,
+  //             )
+  //           : const BorderRadius.only(
+  //               topLeft: radius1,
+  //               topRight: radius2,
+  //               bottomRight: radius2,
+  //             );
+  //     case BubbleType.bottom:
+  //       return dir == Direction.left
+  //           ? const BorderRadius.only(
+  //               topLeft: radius2,
+  //               topRight: radius1,
+  //               bottomLeft: radius1,
+  //             )
+  //           : const BorderRadius.only(
+  //               topLeft: radius1,
+  //               topRight: radius2,
+  //               bottomRight: radius1,
+  //             );
+  //     case BubbleType.alone:
+  //       return BorderRadius.circular(15);
+  //   }
+  // }
 }
